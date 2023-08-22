@@ -55,9 +55,12 @@ namespace addressbook_web_tests
         public void CreateGroupTest()
         {
             GoToHomePage();
-            Login("admin","secret");
+            Login(new AccountData("admin","secret"));
             InitGroupAction();
-            FillGroupData("group 1","header g1","footer g1");
+            GroupData group = new GroupData("group 1");
+            group.Footer = "footer g1";
+            group.Header = "header g1";
+            FillGroupData(group);
             LogOut();
         }
 
@@ -66,17 +69,17 @@ namespace addressbook_web_tests
             driver.FindElement(By.LinkText("Logout")).Click();
         }
 
-        private static void FillGroupData(string groupname, string header, string footer)
+        private static void FillGroupData(GroupData group)
         {
             driver.FindElement(By.Name("group_name")).Click();
             driver.FindElement(By.Name("group_name")).Clear();
-            driver.FindElement(By.Name("group_name")).SendKeys(groupname);
+            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
             driver.FindElement(By.Name("group_header")).Click();
             driver.FindElement(By.Name("group_header")).Clear();
-            driver.FindElement(By.Name("group_header")).SendKeys(header);
+            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
             driver.FindElement(By.Name("group_footer")).Click();
             driver.FindElement(By.Name("group_footer")).Clear();
-            driver.FindElement(By.Name("group_footer")).SendKeys(footer);
+            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
             driver.FindElement(By.Id("content")).Click();
             driver.FindElement(By.Name("submit")).Click();
         }
@@ -87,12 +90,12 @@ namespace addressbook_web_tests
             driver.FindElement(By.Name("new")).Click();
         }
 
-        private static void Login(string login,string password)
+        private static void Login(AccountData accountData)
         {
             driver.FindElement(By.Name("user")).Clear();
-            driver.FindElement(By.Name("user")).SendKeys(login);
+            driver.FindElement(By.Name("user")).SendKeys(accountData.Username);
             driver.FindElement(By.Name("pass")).Clear();
-            driver.FindElement(By.Name("pass")).SendKeys(password);
+            driver.FindElement(By.Name("pass")).SendKeys(accountData.Password);
             driver.FindElement(By.XPath("//input[@value='Login']")).Click();
         }
 
